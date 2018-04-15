@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.adidharmatorutama.beautylicious">
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,7 +20,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".UserAreaActivity"></activity>
+        <activity android:name=".UserAreaActivity" />
+        <activity android:name=".ForgetPasswordActivity" />
+        <activity android:name=".ReservasiActivity" />
+        <activity android:name=".PembelianObatActivity" />
+        <activity android:name=".KonsultasiActivity"></activity>
     </application>
 
 </manifest>

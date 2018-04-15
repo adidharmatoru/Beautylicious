@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -15,8 +16,11 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.SharedPreferences;
 
 public class LoginActivity extends AppCompatActivity {
+    public static final String MyPREFERENCES = "MyPrefs";
+    SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +30,17 @@ public class LoginActivity extends AppCompatActivity {
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
         final TextView tvRegisterLink = (TextView) findViewById(R.id.tvRegisterLink);
         final Button bLogin = (Button) findViewById(R.id.bSignIn);
+        final TextView tvForget = (TextView) findViewById(R.id.tvForget);
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+
+        tvForget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent forgetIntent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                LoginActivity.this.startActivity(forgetIntent);
+            }
+        });
         tvRegisterLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
                 final String username = etUsername.getText().toString();
                 final String password = etPassword.getText().toString();
 
+                final SharedPreferences.Editor editor = sharedpreferences.edit();
+
                 // Response received from the server
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -52,11 +68,17 @@ public class LoginActivity extends AppCompatActivity {
                             if (success) {
                                 String name = jsonResponse.getString("name");
                                 int age = jsonResponse.getInt("age");
+                                LoginActivity.this.finish();
 
                                 Intent intent = new Intent(LoginActivity.this, UserAreaActivity.class);
                                 intent.putExtra("name", name);
                                 intent.putExtra("username", username);
                                 intent.putExtra("age", age);
+                                editor.putString("nameKey", name);
+                                editor.putString("passKey", password);
+                                editor.putString("userKey", username);
+                                editor.putInt("ageKey", age);
+                                editor.commit();
                                 LoginActivity.this.startActivity(intent);
                             } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
